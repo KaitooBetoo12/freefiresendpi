@@ -1,0 +1,2 @@
+# freefiresendpi
+DPI
