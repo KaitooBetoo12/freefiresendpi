@@ -319,7 +319,7 @@
                 ]);
 
                 clearInterval(loadingInterval);
-                progressBar.style.width = '100%';
+                progressBar.style.width = '100%'; 
                 
                 // Thay vì ép kiểu json() ngay, ta lấy text thô để kiểm tra trước
                 const rawText = await apiResponse.text();
@@ -334,28 +334,22 @@
                 }
 
                 if (data.status === "success") {
-                    // Đổ dữ liệu vào DOM
-                    document.getElementById('r_general').innerText = data.sensitivity.general;
-                    // ... (giữ nguyên các dòng gán dữ liệu DOM bên trong)
-                    document.getElementById('r_reference').innerText = `Ref: ${data.searchReference}`;
-                } else {
-                    alert("Lỗi từ máy chủ API: " + (data.message || "Không xác định"));
-                }
-
-                if (data.status === "success") {
-                    // Đổ dữ liệu vào DOM
-                    document.getElementById('r_general').innerText = data.sensitivity.general;
-                    document.getElementById('r_reddot').innerText = data.sensitivity.redDot;
-                    document.getElementById('r_2x').innerText = data.sensitivity.scope2x;
-                    document.getElementById('r_4x').innerText = data.sensitivity.scope4x;
-                    document.getElementById('r_sniper').innerText = data.sensitivity.sniper;
-                    document.getElementById('r_freelook').innerText = data.sensitivity.freeLook;
+                   // KIỂM TRA DỮ LIỆU JSON DỰA TRÊN CẤU TRÚC MỚI CỦA BACKEND
+                if (data && data.device) { 
+                    // Đổ dữ liệu vào DOM, ánh xạ đúng tên biến trong tab Response
+                    document.getElementById('r_general').innerText = data.around;
+                    document.getElementById('r_reddot').innerText = data.reddot;
+                    document.getElementById('r_2x').innerText = data.scope2x;
+                    document.getElementById('r_4x').innerText = data.scope4x;
+                    document.getElementById('r_sniper').innerText = data.awm;
+                    document.getElementById('r_freelook').innerText = data.look;
                     
                     document.getElementById('r_dpi').innerText = data.dpi;
-                    document.getElementById('r_firebtn').innerText = data.fireButton;
-                    document.getElementById('r_reference').innerText = `Ref: ${data.searchReference}`;
+                    document.getElementById('r_firebtn').innerText = data.button;
+                    document.getElementById('r_reference').innerText = `Ref: ${data.searchTitle}`;
                 } else {
-                    alert("Lỗi từ máy chủ API: " + data.message);
+                    alert("Lỗi từ máy chủ API: Không lấy được dữ liệu (hoặc sai định dạng JSON).");
+                }
                 }
 
             } catch (error) {
