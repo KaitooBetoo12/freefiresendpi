@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoraAPP - Tối Ưu Độ Nhạy Free Fire</title>
+    <style>
+        /* CSS Variables cho Theme UI */
+        :root {
+            --bg-color: #0d0b14;
+            --card-bg: #1a1528;
+            --text-main: #ffffff;
+            --text-sub: #a0a0b0;
+            --neon-purple: #9d4edd;
+            --neon-light: #c77dff;
+            --status-success: #00ffcc;
+            --border-radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.3), inset 0 0 10px rgba(157, 78, 221, 0.1);
+            border: 1px solid var(--neon-purple);
+        }
+
+        .header-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: var(--text-main);
+            text-shadow: 0 0 10px var(--neon-purple);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header-sub {
+            text-align: center;
+            color: var(--text-sub);
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-sub);
+        }
+
+        select, input {
+            width: 100%;
+            padding: 14px;
+            background-color: #0d0b14;
+            border: 1px solid #332b47;
+            color: var(--text-main);
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--neon-light);
+            box-shadow: 0 0 8px rgba(199, 125, 255, 0.4);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-light));
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.5);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(157, 78, 221, 0.7);
+        }
+
+        .btn-submit:disabled {
+            background: #444;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading UI */
+        .loading-container {
+            display: none;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background-color: #0d0b14;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border: 1px solid #332b47;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--status-success);
+            box-shadow: 0 0 10px var(--status-success);
+            transition: width 0.1s linear;
+        }
+
+        .loading-text {
+            color: var(--status-success);
+            font-size: 14px;
+            text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
+        }
+
+        /* Result UI */
+        .result-container {
+            display: none;
+            margin-top: 25px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .result-card {
+            background: #0d0b14;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--neon-light);
+            margin-bottom: 15px;
+        }
+
+        .result-card h3 {
+            font-size: 14px;
+            color: var(--text-sub);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+        }
+        
+        .stat-label { color: var(--text-sub); }
+        .stat-value { color: var(--status-success); font-weight: bold; }
+
+        .api-ref {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="header-title">SoraAPP</h1>
+        <p class="header-sub">Tool Tối Ưu Độ Nhạy & DPI eSports</p>
+
+        <form id="optForm">
+            <div class="form-group">
+                <label>Phiên Bản Game</label>
+                <select id="gameVersion">
+                    <option value="ff_max">Free Fire MAX (Tâm nhẹ, dễ văng)</option>
+                    <option value="ff_normal">Free Fire Thường (Tâm đầm, nặng tay)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Hãng Điện Thoại (Brand)</label>
+                <select id="brand">
+                    <option value="iPhone">iPhone (Apple)</option>
+                    <option value="Samsung">Samsung</option>
+                    <option value="Xiaomi">Redmi / Xiaomi</option>
+                    <option value="Poco">Poco</option>
+                    <option value="Oppo">Oppo</option>
+                    <option value="iQOO">iQOO</option>
+                    <option value="RedMagic">RedMagic (Gaming)</option>
+                    <option value="ROG Phone">ROG Phone (Gaming)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Tên Máy Chính Xác</label>
+                <input type="text" id="device" placeholder="VD: iPhone 13 Pro, Galaxy S23 Ultra" required>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-submit">PHÂN TÍCH HỆ THỐNG</button>
+        </form>
+
+        <!-- Trạng thái Loading -->
+        <div class="loading-container" id="loadingState">
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+            <p class="loading-text" id="loadingText">Đang kết nối Google Custom Search API...</p>
+        </div>
+
+        <!-- Trạng thái Kết quả -->
+        <div class="result-container" id="resultState">
+            
+            <div class="result-card">
+                <h3>Cấu Hình Độ Nhạy (Sens)</h3>
+                <div class="stat-grid">
+                    <div class="stat-item"><span class="stat-label">Nhìn Xung Quanh:</span> <span class="stat-value" id="r_general">0</span></div>
+                    <div class="stat-item"><span class="stat-label">Red Dot:</span> <span class="stat-value" id="r_reddot">0</span></div>
+                    <div class="stat-item"><span class="stat-label">Ống ngắm 2x:</span> <span class="stat-value" id="r_2x">0</span></div>
+                    <div class="stat-item"><span class="stat-label">Ống ngắm 4x:</span> <span class="stat-value" id="r_4x">0</span></div>
+                    <div class="stat-item"><span class="stat-label">Súng Ngắm:</span> <span class="stat-value" id="r_sniper">0</span></div>
+                    <div class="stat-item"><span class="stat-label">Nhìn Tự Do:</span> <span class="stat-value" id="r_freelook">0</span></div>
+                </div>
+            </div>
+
+            <div class="result-card">
+                <h3>Hệ Thống & Điều Khiển</h3>
+                <div class="stat-grid">
+                    <div class="stat-item"><span class="stat-label">DPI / Con Trỏ:</span> <span class="stat-value" id="r_dpi">0</span></div>
+                    <div class="stat-item"><span class="stat-label">Nút Bắn (Fire Btn):</span> <span class="stat-value" id="r_firebtn">0%</span></div>
+                </div>
+            </div>
+
+            <p class="api-ref" id="r_reference">Ref: API Data</p>
+        </div>
+    </div>
+
+    <script>
+        // === KHAI BÁO BIẾN GAS_API_URL ===
+        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzSCHEKpsYVr56ywItONiIBPMZ4EVXSOD27RPZsTBju17UVNSkM8w4s4950MKdP2pbZ/exec";
+
+        const form = document.getElementById('optForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loadingState = document.getElementById('loadingState');
+        const resultState = document.getElementById('resultState');
+        const progressBar = document.getElementById('progressBar');
+        const loadingText = document.getElementById('loadingText');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Lấy data input
+            const gameVersion = document.getElementById('gameVersion').value;
+            const brand = document.getElementById('brand').value;
+            const device = document.getElementById('device').value;
+
+            // Reset UI
+            resultState.style.display = 'none';
+            loadingState.style.display = 'block';
+            submitBtn.disabled = true;
+            progressBar.style.width = '0%';
+            loadingText.innerText = "Đang kết nối Google Custom Search API...";
+
+            // Logic Progress Bar 10 giây (10000ms = 100 nhịp x 100ms)
+            let progress = 0;
+            const loadingInterval = setInterval(() => {
+                progress += 1; // Mỗi 100ms tăng 1% -> 10s là 100%
+                progressBar.style.width = `${progress}%`;
+                
+                if (progress === 30) loadingText.innerText = "Đang tính toán Hash phân tích thiết bị...";
+                if (progress === 60) loadingText.innerText = `Đang áp dụng thuật toán cho ${brand}...`;
+                if (progress === 85) loadingText.innerText = "Đang tối ưu hóa hệ số ngắm...";
+            }, 100);
+
+            try {
+                // Fetch API Backend kèm tham số
+                const apiUrl = `${GAS_API_URL}?brand=${encodeURIComponent(brand)}&device=${encodeURIComponent(device)}&gameVersion=${gameVersion}`;
+                
+                // Chạy song song: Fetch Data API VÀ chờ đủ 10 giây Progress bar
+                const [apiResponse] = await Promise.all([
+                    fetch(apiUrl),
+                    new Promise(resolve => setTimeout(resolve, 10000)) // Đảm bảo chờ đúng 10s
+                ]);
+
+                clearInterval(loadingInterval);
+                progressBar.style.width = '100%';
+                
+                const data = await apiResponse.json();
+
+                if (data.status === "success") {
+                    // Đổ dữ liệu vào DOM
+                    document.getElementById('r_general').innerText = data.sensitivity.general;
+                    document.getElementById('r_reddot').innerText = data.sensitivity.redDot;
+                    document.getElementById('r_2x').innerText = data.sensitivity.scope2x;
+                    document.getElementById('r_4x').innerText = data.sensitivity.scope4x;
+                    document.getElementById('r_sniper').innerText = data.sensitivity.sniper;
+                    document.getElementById('r_freelook').innerText = data.sensitivity.freeLook;
+                    
+                    document.getElementById('r_dpi').innerText = data.dpi;
+                    document.getElementById('r_firebtn').innerText = data.fireButton;
+                    document.getElementById('r_reference').innerText = `Ref: ${data.searchReference}`;
+                } else {
+                    alert("Lỗi từ máy chủ API: " + data.message);
+                }
+
+            } catch (error) {
+                clearInterval(loadingInterval);
+                alert("Lỗi kết nối mạng hoặc CORS. Vui lòng kiểm tra lại cấu hình GAS.");
+                console.error(error);
+            } finally {
+                loadingState.style.display = 'none';
+                resultState.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerText = "PHÂN TÍCH LẠI";
+            }
+        });
+    </script>
+</body>
+</html>
