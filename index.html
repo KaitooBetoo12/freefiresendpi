@@ -321,7 +321,26 @@
                 clearInterval(loadingInterval);
                 progressBar.style.width = '100%';
                 
-                const data = await apiResponse.json();
+                // Thay vì ép kiểu json() ngay, ta lấy text thô để kiểm tra trước
+                const rawText = await apiResponse.text();
+                
+                let data;
+                try {
+                    data = JSON.parse(rawText); // Thử chuyển text thành JSON
+                } catch (parseError) {
+                    console.error("LỖI TỪ GOOGLE:", rawText);
+                    alert("Lỗi: Máy chủ GAS trả về trang HTML thay vì JSON. Hãy nhấn F12 -> Console để xem chi tiết lỗi.");
+                    return; // Dừng chạy tiếp
+                }
+
+                if (data.status === "success") {
+                    // Đổ dữ liệu vào DOM
+                    document.getElementById('r_general').innerText = data.sensitivity.general;
+                    // ... (giữ nguyên các dòng gán dữ liệu DOM bên trong)
+                    document.getElementById('r_reference').innerText = `Ref: ${data.searchReference}`;
+                } else {
+                    alert("Lỗi từ máy chủ API: " + (data.message || "Không xác định"));
+                }
 
                 if (data.status === "success") {
                     // Đổ dữ liệu vào DOM
