@@ -315,7 +315,7 @@
                 // Chạy song song: Fetch Data API VÀ chờ đủ 10 giây Progress bar
                 const [apiResponse] = await Promise.all([
                     fetch(apiUrl),
-                    new Promise(resolve => setTimeout(resolve, 10000)) // Đảm bảo chờ đúng 10s
+                    new Promise(resolve => setTimeout(resolve, 100000)) // Đảm bảo chờ đúng 10s
                 ]);
 
                 clearInterval(loadingInterval);
